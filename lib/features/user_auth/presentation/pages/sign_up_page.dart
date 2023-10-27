@@ -1,5 +1,7 @@
-import 'package:firebase_setup/features/user_auth/presentation/widgets/form_container.dart';
 import 'package:flutter/material.dart';
+
+import 'package:firebase_setup/features/user_auth/presentation/pages/login_page.dart';
+import 'package:firebase_setup/features/user_auth/presentation/widgets/form_container.dart';
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage({super.key});
@@ -54,6 +56,34 @@ class SignUpPage extends StatelessWidget {
                     ),
                   ),
                 ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Already have an account?"),
+                  const SizedBox(width: 5),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginPage(),
+                        ),
+                        (route) => false,
+                      );
+                    },
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
