@@ -1,14 +1,14 @@
 import 'package:firebase_setup/features/user_auth/presentation/widgets/form_container.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class SignUpPage extends StatelessWidget {
+  const SignUpPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('Sign Up'),
       ),
       body: Center(
         child: Padding(
@@ -17,12 +17,17 @@ class LoginPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                'Login',
+                'Sign Up',
                 style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
               ),
               const SizedBox(
                 height: 30,
               ),
+              const FormContainerWidget(
+                hintText: 'Username',
+                isPasswordField: false,
+              ),
+              const SizedBox(height: 10),
               const FormContainerWidget(
                 hintText: 'Email',
                 isPasswordField: false,
@@ -42,7 +47,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 child: const Center(
                   child: Text(
-                    'Login',
+                    'Sign Up',
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
