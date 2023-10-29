@@ -1,10 +1,31 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_setup/features/user_auth/firebase_auth_implementation/firebase_auth_services.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_setup/features/user_auth/presentation/pages/login_page.dart';
 import 'package:firebase_setup/features/user_auth/presentation/widgets/form_container.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
+
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+  final FireBaseAuthService _auth = FireBaseAuthService();
+
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,34 +46,40 @@ class SignUpPage extends StatelessWidget {
               const SizedBox(
                 height: 30,
               ),
-              const FormContainerWidget(
+              FormContainerWidget(
+                controller: _usernameController,
                 hintText: 'Username',
                 isPasswordField: false,
               ),
               const SizedBox(height: 10),
-              const FormContainerWidget(
+              FormContainerWidget(
+                controller: _emailController,
                 hintText: 'Email',
                 isPasswordField: false,
               ),
               const SizedBox(height: 10),
-              const FormContainerWidget(
+              FormContainerWidget(
+                controller: _passwordController,
                 hintText: 'Password',
                 isPasswordField: true,
               ),
               const SizedBox(height: 30),
-              Container(
-                width: double.infinity,
-                height: 45,
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Center(
-                  child: Text(
-                    'Sign Up',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+              GestureDetector(
+                onTap: _signUp,
+                child: Container(
+                  width: double.infinity,
+                  height: 45,
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -90,5 +117,23 @@ class SignUpPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _signUp() async {
+    String username = _usernameController.text;
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    // Capture the context locally before the asynchronous operation
+    BuildContext localContext = context;
+
+    User? user = await _auth.signUpWithEmailAndPassword(email, password);
+    if (user != null) {
+      print('User created sucessfuly');
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamed(localContext, "/home");
+    } else {
+      print('Some error occured');
+    }
   }
 }

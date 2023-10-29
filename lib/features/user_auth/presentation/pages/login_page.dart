@@ -1,11 +1,31 @@
-import 'package:firebase_setup/features/user_auth/presentation/pages/sign_up_page.dart';
 import 'package:flutter/material.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_setup/features/user_auth/firebase_auth_implementation/firebase_auth_services.dart';
+import 'package:firebase_setup/features/user_auth/presentation/pages/sign_up_page.dart';
 import 'package:firebase_setup/features/user_auth/presentation/widgets/form_container.dart';
-import 'home_page.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final FireBaseAuthService _auth = FireBaseAuthService();
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  bool _isSigning = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,23 +46,20 @@ class LoginPage extends StatelessWidget {
               const SizedBox(
                 height: 30,
               ),
-              const FormContainerWidget(
+              FormContainerWidget(
+                controller: _emailController,
                 hintText: 'Email',
                 isPasswordField: false,
               ),
               const SizedBox(height: 10),
-              const FormContainerWidget(
+              FormContainerWidget(
+                controller: _passwordController,
                 hintText: 'Password',
                 isPasswordField: true,
               ),
               const SizedBox(height: 30),
               GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomePage()));
-                },
+                onTap: _signIn,
                 child: Container(
                   width: double.infinity,
                   height: 45,
@@ -94,5 +111,33 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _signIn() async {
+    setState(() {
+      _isSigning = true;
+      print('setState true');
+    });
+
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    // Capture the context locally before the asynchronous operation
+    BuildContext localContext = context;
+
+    User? user = await _auth.signInWithEmailAndPassword(email, password);
+
+    setState(() {
+      _isSigning = false;
+      print('setState false');
+    });
+
+    if (user != null) {
+      print('User logged in sucessfuly');
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamed(localContext, "/home");
+    } else {
+      print('Some error occured');
+    }
   }
 }
