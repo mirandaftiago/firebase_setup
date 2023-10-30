@@ -19,6 +19,8 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  bool _isSigningUp = false;
+
   @override
   void dispose() {
     _usernameController.dispose();
@@ -73,15 +75,18 @@ class _SignUpPageState extends State<SignUpPage> {
                     color: Colors.blue,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Center(
-                    child: Text(
-                      'Sign Up',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                  child: Center(
+                          child: _isSigningUp
+                      ? const CircularProgressIndicator(
+                          color: Colors.white,
+                        ) : const Text(
+                            'Sign Up',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                 ),
               ),
               const SizedBox(
@@ -120,6 +125,10 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _signUp() async {
+    setState(() {
+      _isSigningUp = true;
+    });
+
     String username = _usernameController.text;
     String email = _emailController.text;
     String password = _passwordController.text;
@@ -128,6 +137,11 @@ class _SignUpPageState extends State<SignUpPage> {
     BuildContext localContext = context;
 
     User? user = await _auth.signUpWithEmailAndPassword(email, password);
+
+    setState(() {
+      _isSigningUp = false;
+    });
+
     if (user != null) {
       print('User created sucessfuly');
       // ignore: use_build_context_synchronously
