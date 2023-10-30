@@ -9,12 +9,8 @@ class FireBaseAuthService {
       UserCredential credential = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       return credential.user;
-    } catch (e) {
-      if (e is FirebaseAuthException) {
-        print('Firebase authentication error: ${e.code}');
-      } else {
-        print('Some error occurred');
-      }
+    } on FirebaseAuthException catch (e) {
+      print('Firebase authentication error: ${e.code}');
     }
     return null;
   }
@@ -25,12 +21,8 @@ class FireBaseAuthService {
       UserCredential credential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       return credential.user;
-    } catch (e) {
-      if (e is FirebaseAuthException) {
-        print('Firebase authentication error: ${e.code}');
-      } else {
-        print('Some error occurred');
-      }
+    } on FirebaseAuthException catch (e) {
+      print('Firebase authentication error: ${e.code}');
     }
     return null;
   }

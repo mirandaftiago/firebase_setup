@@ -67,8 +67,8 @@ class _LoginPageState extends State<LoginPage> {
                     color: Colors.blue,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Center(
-                    child: Text(
+                  child: Center(
+                    child: _isSigning ? const CircularProgressIndicator(color: Colors.white,): const Text(
                       'Login',
                       style: TextStyle(
                         color: Colors.white,
