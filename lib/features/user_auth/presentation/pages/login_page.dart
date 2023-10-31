@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_setup/global/common/toast.dart';
 import 'package:firebase_setup/features/user_auth/firebase_auth_implementation/firebase_auth_services.dart';
 import 'package:firebase_setup/features/user_auth/presentation/pages/sign_up_page.dart';
 import 'package:firebase_setup/features/user_auth/presentation/widgets/form_container.dart';
@@ -13,7 +14,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final FireBaseAuthService _auth = FireBaseAuthService();
+  final FirebaseAuthService _auth = FirebaseAuthService();
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -120,12 +121,11 @@ class _LoginPageState extends State<LoginPage> {
   void _signIn() async {
     setState(() {
       _isSigning = true;
-      print('setState true');
     });
 
     String email = _emailController.text;
     String password = _passwordController.text;
-
+    
     // Capture the context locally before the asynchronous operation
     BuildContext localContext = context;
 
@@ -133,15 +133,13 @@ class _LoginPageState extends State<LoginPage> {
 
     setState(() {
       _isSigning = false;
-      print('setState false');
     });
 
     if (user != null) {
-      print('User logged in sucessfuly');
-      // ignore: use_build_context_synchronously
+      showToast(message: "User is successfully signed in");
       Navigator.pushNamed(localContext, "/home");
     } else {
-      print('Some error occured');
+      showToast(message: "some error occured");
     }
   }
 }
